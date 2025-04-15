@@ -1,0 +1,79 @@
+<div class="container no-scroll-container">
+    <div class="card p-3 no-scroll-card">
+        <div class="row g-0">
+            <!-- Form Column -->
+            <div class="col-md-6 pe-3">
+                <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+                    <mat-form-field appearance="outline" class="w-100 mb-3">
+                        <mat-label>Product Name</mat-label>
+                        <input matInput placeholder="Product Name" formControlName="productName">
+                        <mat-error *ngIf="productForm.controls['productName'].invalid">
+                            Product name is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="w-100 mb-3">
+                        <mat-label>Product Description</mat-label>
+                        <textarea matInput placeholder="Product Description" formControlName="productDescription" rows="2"></textarea>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="w-100 mb-3">
+                        <mat-label>Product Actual Price</mat-label>
+                        <input matInput type="number" placeholder="Product Actual Price" formControlName="productActualPrice">
+                        <mat-error *ngIf="productForm.controls['productActualPrice'].invalid">
+                            Valid price is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="w-100 mb-4">
+                        <mat-label>Product Discounted Price</mat-label>
+                        <input matInput type="number" placeholder="Product Discounted Price" formControlName="productDiscountedPrice">
+                        <mat-error *ngIf="productForm.controls['productDiscountedPrice'].invalid">
+                            Valid price is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <button mat-stroked-button color="warn" type="button" (click)="clearForm()">Clear</button>
+                        <button mat-raised-button color="primary" type="submit" *ngIf="isNewProduct" [disabled]="productForm.invalid">
+                            Add Product
+                        </button>
+                        <button mat-raised-button color="primary" type="submit" *ngIf="!isNewProduct" [disabled]="productForm.invalid">
+                            Update Product
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Image Upload Column -->
+            <div class="col-md-6">
+                <div class="dropzone" appDrag (files)="fileDropped($event)">
+                    <div class="text-wrapper">
+                        <div class="center">
+                            <mat-icon class="upload-icon">cloud_upload</mat-icon>
+                            <div>Drag and Drop your image or</div>
+                            <a (click)="fileInput.click()" class="browse-link">
+                                Browse
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="file" multiple style="display: none;" #fileInput (change)="onFileSelected($event)">
+
+                <div class="image-preview-container mt-3">
+                    <mat-grid-list cols="4" rowHeight="1:1" gutterSize="8px">
+                        <mat-grid-tile *ngFor="let file of productImages; let i = index">
+                            <div class="image-tile">
+                                <span class="btn-remove-image" matTooltip="Remove image" (click)="removeImage(i)">
+                                    <mat-icon>close</mat-icon>
+                                </span>
+                                <img [src]="file.url" class="preview-image">
+                            </div>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

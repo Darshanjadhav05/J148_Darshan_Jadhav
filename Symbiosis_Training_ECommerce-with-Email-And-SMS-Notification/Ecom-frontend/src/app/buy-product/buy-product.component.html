@@ -1,0 +1,145 @@
+<div class="full-page-overlay" *ngIf="isLoading">
+  <div class="spinner-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <div class="loading-text">Processing your order...</div>
+  </div>
+</div>
+<div class="container mt-5">
+  <div class="card p-3">
+    <div class="row">
+      <!-- LEFT: Checkout Form -->
+      <div class="col-6">
+        <h5>Delivery Address</h5>
+        <mat-radio-group [(ngModel)]="addressType" class="mb-3">
+          <mat-radio-button value="existing">Deliver to Existing Address</mat-radio-button>
+          <mat-radio-button value="new">Deliver to New Address</mat-radio-button>
+        </mat-radio-group>
+
+        <!-- EXISTING Address Selection -->
+        <div *ngIf="addressType === 'existing'" class="mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Select Saved Address</mat-label>
+            <mat-select [(ngModel)]="selectedAddressId">
+              <mat-option *ngFor="let addr of savedAddresses" [value]="addr.id">
+                {{ addr.fullName }}, 
+                {{ addr.city || addr.fullAddress }}, 
+                {{ addr.pincode || '' }}
+              </mat-option>
+              
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div align="right" class="mt-2">
+          <button mat-stroked-button color="primary" (click)="placeOrder()" [disabled]="!selectedAddressId">
+            Place Order
+          </button>
+        </div>
+      
+
+        <!-- NEW Address Form -->
+        <form *ngIf="addressType === 'new'" [formGroup]="orderForm" (ngSubmit)="placeOrder()">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="fullName" placeholder="John Doe">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>House / Flat No.</mat-label>
+            <input matInput formControlName="houseNumber" placeholder="A-101">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Street / Area</mat-label>
+            <input matInput formControlName="street" placeholder="MG Road">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>City</mat-label>
+            <input matInput formControlName="city" placeholder="Pune">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>State</mat-label>
+            <input matInput formControlName="state" placeholder="Maharashtra">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Pincode</mat-label>
+            <input matInput formControlName="pincode" placeholder="411001">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Country</mat-label>
+            <input matInput formControlName="country" placeholder="India">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Contact Number</mat-label>
+            <input matInput formControlName="contactNumber" placeholder="9876543210">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Alternate Contact Number</mat-label>
+            <input matInput formControlName="alternateContactNumber" placeholder="9123456780">
+          </mat-form-field>
+
+          <div align="right" class="mt-2">
+            <button mat-stroked-button color="primary" type="submit" [disabled]="orderForm.invalid">
+              Place Order
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- RIGHT: Product Summary -->
+      <div class="col-6">
+        <h5>Order Summary</h5>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Amount</th>
+              <th>Quantity</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of productDetails">
+              <td>{{ product.productName }}</td>
+              <td>{{ formatCurrency(product.productDiscountedPrice) }}</td>
+              <td>
+                <select class="form-select"
+                        [ngModel]="getQuantityForProduct(product.productId ?? 0)"
+                        (change)="onQuantityChanged($any($event.target).value, product.productId ?? 0)">
+                  <option *ngFor="let qty of [1,2,3]" [value]="qty">{{ qty }}</option>
+                </select>
+              </td>
+              <td>{{ formatCurrency(getCalculatedTotal(product.productId ?? 0, product.productDiscountedPrice ?? 0)) }}</td>
+            </tr>
+            <tr>
+              <td colspan="2"></td>
+              <td><strong>Subtotal</strong></td>
+              <td>{{ formatCurrency(subtotal) }}</td>
+            </tr>
+            <tr *ngIf="deliveryCharge > 0">
+              <td colspan="2"></td>
+              <td><strong>Delivery Charge</strong></td>
+              <td>{{ formatCurrency(deliveryCharge) }}</td>
+            </tr>
+            <tr>
+              <td colspan="2"></td>
+              <td><strong>GST ({{ gstPercentage }}%)</strong></td>
+              <td>{{ formatCurrency(gstAmount) }}</td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="2"></td>
+              <td><strong>Grand Total</strong></td>
+              <td>{{ formatCurrency(grandTotal) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>

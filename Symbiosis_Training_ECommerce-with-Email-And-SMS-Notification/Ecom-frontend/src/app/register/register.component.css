@@ -1,0 +1,101 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .container.mt-5 {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-top: 0 !important;
+  }
+  
+  .card.p-4 {
+    max-width: 500px;
+    width: 100%;
+    max-height: 95vh;
+    overflow-y: auto; /* Only scroll the card if absolutely necessary */
+  }
+  
+  /* Optional: Remove card scrollbar visually but keep functionality */
+  .card.p-4::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+/* Card styling */
+.register-card {
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Form header */
+  h2 {
+    color: #3f51b5;
+    font-weight: 500;
+  }
+  
+  /* Form fields */
+  .mat-form-field {
+    width: 100%;
+  }
+  
+  /* Register button */
+  .register-btn {
+    width: 100%;
+    height: 48px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+  
+  .register-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Error message */
+  .alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+  
+  /* Login link */
+  .login-link {
+    color: #3f51b5;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .login-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Button content */
+  .button-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  /* Spinner */
+  .mat-spinner {
+    margin: 0 auto;
+  }
+  
+  .mat-spinner circle {
+    stroke: #ffffff;
+  }

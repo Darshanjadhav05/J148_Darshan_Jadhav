@@ -1,0 +1,78 @@
+<div class="order-history-container">
+    <div class="header-section">
+      <h1 class="page-title">My Orders</h1>
+      <div class="order-filter">
+        <mat-form-field appearance="outline">
+          <mat-label>Filter by status</mat-label>
+          <mat-select [(value)]="selectedStatus" (selectionChange)="applyFilter()">
+            <mat-option value="all">All Orders</mat-option>
+            <mat-option value="processing">Processing</mat-option>
+            <mat-option value="shipped">Shipped</mat-option>
+            <mat-option value="delivered">Delivered</mat-option>
+            <mat-option value="cancelled">Cancelled</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  
+    <div *ngIf="paginatedOrders?.length && paginatedOrders.length > 0; else noOrders" class="orders-list">
+      <div *ngFor="let order of paginatedOrders" class="order-card mat-elevation-z4">
+        <div class="order-header">
+          <div class="order-meta">
+            <div class="order-id">Order #{{order.orderId}}</div>
+            <div class="order-date">Placed on {{order.orderDate | date:'mediumDate'}}</div>
+          </div>
+          <div class="order-status" [ngClass]="getStatusClass(order.orderStatus)">
+            {{order.orderStatus}}
+          </div>
+        </div>
+  
+        <div class="order-body">
+          <div class="order-summary">
+            <div class="summary-item"><span class="label">Delivery to:</span> <span class="value">{{order.orderFullName}}</span></div>
+            <div class="summary-item"><span class="label">Address:</span> <span class="value">{{order.orderFullOrder}}</span></div>
+            <div class="summary-item">
+              <span class="label">Contact:</span> <span class="value">{{order.orderContactNumber}}</span>
+              <span *ngIf="order.orderAlternateContactNumber" class="value"> / {{order.orderAlternateContactNumber}}</span>
+            </div>
+          </div>
+  
+          <div class="order-product">
+            <img [src]="getProductImage(order.product)" 
+                 alt="{{order.product?.productName || 'Product image'}}" 
+                 class="product-image"
+                 (error)="handleImageError($event)">
+            <div class="product-details">
+              <div class="product-name">{{order.product.productName}}</div>
+              <div class="product-price">{{order.product.productDiscountedPrice | currency:'INR':true}}</div>
+              <div class="product-description">{{order.product.productDescription | truncate:100}}</div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="order-footer">
+          <div class="total-amount">Total: {{order.orderAmount | currency:'INR':true}}</div>
+          <div class="action-buttons">
+            <button mat-stroked-button color="primary" *ngIf="order.orderStatus === 'shipped'">Track Order</button>
+            <button mat-stroked-button *ngIf="order.orderStatus === 'delivered'">Buy Again</button>
+            <button mat-stroked-button *ngIf="order.orderStatus === 'processing'">Cancel Order</button>
+            <button mat-button color="primary">View Details</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <ng-template #noOrders>
+      <div class="empty-orders">
+        <mat-icon class="empty-icon">shopping_bag</mat-icon>
+        <h2>No Orders Yet</h2>
+        <p>You haven't placed any orders with us yet.</p>
+        <button mat-raised-button color="primary" routerLink="/products">Start Shopping</button>
+      </div>
+    </ng-template>
+  
+    <mat-paginator [length]="totalOrders" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" 
+                   (page)="onPageChange($event)" showFirstLastButtons>
+    </mat-paginator>
+  </div>
+  
