@@ -1,0 +1,89 @@
+<div class="container mt-5">
+    <div class="card p-4 register-card">
+      <h2 class="text-center mb-4">Create Your Account</h2>
+      <form [formGroup]="registerForm" (ngSubmit)="register()">
+        <!-- Username Field -->
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="userName" placeholder="Username">
+          <mat-icon matSuffix>person</mat-icon>
+          <mat-error *ngIf="registerForm.controls['userName'].errors?.['required']">
+            Username is required
+          </mat-error>
+          <mat-error *ngIf="registerForm.controls['userName'].errors?.['minlength']">
+            Minimum 3 characters required
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Email</mat-label>
+          <input type="email" matInput formControlName="userEmail" placeholder="Email">
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-error *ngIf="registerForm.controls['userEmail'].errors?.['required']">
+            Email is required
+          </mat-error>
+          <mat-error *ngIf="registerForm.controls['userEmail'].errors?.['email']">
+            Please enter a valid email
+          </mat-error>
+        </mat-form-field>
+        <!-- First Name Field -->
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>First Name</mat-label>
+          <input matInput formControlName="userFirstName" placeholder="First Name">
+          <mat-icon matSuffix>badge</mat-icon>
+          <mat-error *ngIf="registerForm.controls['userFirstName'].errors?.['required']">
+            First name is required
+          </mat-error>
+        </mat-form-field>
+  
+        <!-- Last Name Field -->
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Last Name</mat-label>
+          <input matInput formControlName="userLastName" placeholder="Last Name">
+          <mat-icon matSuffix>badge</mat-icon>
+          <mat-error *ngIf="registerForm.controls['userLastName'].errors?.['required']">
+            Last name is required
+          </mat-error>
+        </mat-form-field>
+  
+        <!-- Password Field -->
+        <mat-form-field appearance="outline" class="w-100 mb-4">
+          <mat-label>Password</mat-label>
+          <input type="password" matInput formControlName="userPassword" placeholder="Password">
+          <mat-icon matSuffix>lock</mat-icon>
+          <mat-error *ngIf="registerForm.controls['userPassword'].errors?.['required']">
+            Password is required
+          </mat-error>
+          <mat-error *ngIf="registerForm.controls['userPassword'].errors?.['minlength']">
+            Minimum 6 characters required
+          </mat-error>
+        </mat-form-field>
+  
+        <!-- Error Message -->
+        <div *ngIf="registerError" class="alert alert-danger mb-3">
+          {{ registerErrorMessage }}
+        </div>
+  
+        <!-- Register Button -->
+        <div class="text-center">
+          <button 
+            type="submit" 
+            mat-raised-button 
+            color="primary" 
+            class="register-btn" 
+            [disabled]="registerForm.invalid || loading">
+            <span class="button-content">
+              <mat-spinner *ngIf="loading" diameter="20" strokeWidth="3"></mat-spinner>
+              <span *ngIf="!loading">Register</span>
+            </span>
+          </button>
+        </div>
+  
+        <!-- Login Link -->
+        <div class="text-center mt-3">
+          <span>Already have an account? </span>
+          <a class="login-link" (click)="navigateToLogin()">Login here</a>
+        </div>
+      </form>
+    </div>
+  </div>

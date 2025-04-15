@@ -1,0 +1,90 @@
+<div class="product-detail-container">
+    <div class="product-detail-card">
+      <!-- Product Images Section -->
+      <div class="product-images-section">
+        <!-- Main Product Image -->
+        <div class="main-image-container" *ngIf="(product?.productImages?.length ?? 0) > 0">
+          <img 
+            [src]="product.productImages[selectProductIndex].url" 
+            class="main-product-image"
+            (click)="zoomImage(product.productImages[selectProductIndex].url)">
+          <div class="image-zoom-hint" (click)="zoomImage(product.productImages[selectProductIndex].url)">
+            <mat-icon>zoom_in</mat-icon> Click to zoom
+          </div>
+        </div>
+  
+        <!-- Thumbnail Gallery -->
+        <div class="thumbnail-gallery">
+          <div 
+            *ngFor="let image of product.productImages; let i = index"
+            class="thumbnail-container"
+            [class.active-thumbnail]="i === selectProductIndex"
+            (click)="changeIndex(i)">
+            <img 
+              [src]="image.url" 
+              [alt]="'Thumbnail ' + (i + 1) + ' for ' + product.productName"
+              class="thumbnail-image">
+          </div>
+        </div>
+      </div>
+  
+      <!-- Product Info Section -->
+      <div class="product-info-section">
+        <!-- Product Name -->
+        <h1 class="product-name">{{ product.productName }}</h1>
+  
+        <!-- Price Section -->
+        <div class="price-section">
+          <div class="current-price">
+            Rs. {{ product.productDiscountedPrice | number }}
+          </div>
+          <div *ngIf="product.productDiscountedPrice !== product.productActualPrice" class="original-price">
+            <span class="strikethrough">Rs. {{ product.productActualPrice | number }}</span>
+            <span class="discount-badge">
+              {{ calculateDiscountPercent() }}% OFF
+            </span>
+          </div>
+        </div>
+  
+        <!-- Description -->
+        <div class="description-section">
+          <h3 class="section-title">Product Description</h3>
+          <p class="product-description">{{ product.productDescription }}</p>
+        </div>
+  
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button 
+            mat-raised-button 
+            color="primary" 
+            class="buy-now-btn"
+            (click)="buyProduct(product.productId ?? 0)">
+            <mat-icon>flash_on</mat-icon> BUY NOW
+          </button>
+          <button 
+            mat-raised-button 
+            color="accent"
+            class="add-to-cart-btn"
+            (click)="addToCart(product.productId ?? 0)">
+            <mat-icon>add_shopping_cart</mat-icon> ADD TO CART
+          </button>
+        </div>
+  
+        <!-- Additional Info -->
+        <div class="additional-info">
+          <div class="info-item">
+            <mat-icon class="info-icon">local_shipping</mat-icon>
+            <span>Free shipping on orders over Rs. 1000</span>
+          </div>
+          <div class="info-item">
+            <mat-icon class="info-icon">assignment_return</mat-icon>
+            <span>Easy 7-day returns</span>
+          </div>
+          <div class="info-item">
+            <mat-icon class="info-icon">verified_user</mat-icon>
+            <span>Genuine product guarantee</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

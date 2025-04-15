@@ -1,0 +1,96 @@
+<mat-toolbar color="primary" class="main-toolbar">
+  <div class="toolbar-container">
+    <!-- Logo/Brand Name -->
+    <div class="brand-section" (click)="navigateTo('/')">
+      <mat-icon class="brand-icon">shopping_cart</mat-icon>
+      <span class="brand-name">ShopEase</span>
+    </div>
+
+    <!-- Spacer -->
+    <span class="spacer"></span>
+
+    <!-- User Actions -->
+    <div class="user-actions">
+      <!-- Login/Logout -->
+      <button *ngIf="!isLoggedIn()" 
+              mat-stroked-button 
+              color="accent" 
+              (click)="navigateToLogin()"
+              class="action-button">
+        <mat-icon>login</mat-icon>
+        Login
+      </button>
+
+      <button *ngIf="isLoggedIn()" 
+              mat-stroked-button 
+              color="accent" 
+              (click)="logout()"
+              class="action-button">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+
+      <!-- User Profile (when logged in) -->
+      <button *ngIf="isLoggedIn()" 
+              mat-icon-button 
+              [matMenuTriggerFor]="userMenu"
+              class="profile-button">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="navigateTo('/profile')">
+          <mat-icon>person</mat-icon>
+          <span>My Profile</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</mat-toolbar>
+
+<!-- Navigation Toolbar -->
+<mat-toolbar *ngIf="isLoggedIn()" class="nav-toolbar">
+  <div class="nav-container">
+    <button mat-button (click)="navigateTo('/')" class="nav-button">
+      <mat-icon>home</mat-icon>
+      Home
+    </button>
+
+    <div *ngIf="isUser()" class="user-nav">
+      <button mat-button (click)="navigateTo('/cart')" class="nav-button">
+        <mat-icon>shopping_cart</mat-icon>
+        Cart <span *ngIf="cartCount > 0" class="badge">{{ cartCount }}</span>
+      </button>
+      <button mat-button (click)="navigateTo('/myOrders')" class="nav-button">
+        <mat-icon>receipt</mat-icon>
+        My Orders
+      </button>
+      <button 
+  mat-icon-button 
+  [matBadge]="wishlistCount" 
+  matBadgeColor="warn" 
+  routerLink="/wishlist">
+  <mat-icon>favorite</mat-icon>
+</button>
+    </div>
+    
+
+    <div *ngIf="isAdmin()" class="admin-nav">
+      <button mat-button (click)="navigateTo('/addNewProduct')" class="nav-button">
+        <mat-icon>add_circle</mat-icon>
+        Add Product
+      </button>
+      <button mat-button (click)="navigateTo('/showProductDetails')" class="nav-button">
+        <mat-icon>list_alt</mat-icon>
+        Products
+      </button>
+      <button mat-button (click)="navigateTo('/orderInformation')" class="nav-button">
+        <mat-icon>assignment</mat-icon>
+        Orders
+      </button>
+    </div>
+  </div>
+</mat-toolbar>

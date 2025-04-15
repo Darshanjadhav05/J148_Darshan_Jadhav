@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Custom dialog container */
+.custom-dialog-container .mat-dialog-container {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    overflow: hidden;
+  }
+  
+  /* Backdrop styling */
+  .custom-dialog-container + .cdk-overlay-dark-backdrop {
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(2px);
+  }

@@ -1,0 +1,51 @@
+<div class="cart-container">
+  <div class="cart-header">
+    <h2 class="cart-title">Your Shopping Cart</h2>
+    <button class="action-button primary-button" (click)="checkout()">
+      Proceed to Checkout
+    </button>
+  </div>
+
+  <table class="cart-table" *ngIf="cartDetails.length > 0; else emptyCart">
+    <thead class="cart-table-header">
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Discounted Price</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="cart-table-row" *ngFor="let item of cartDetails">
+        <td class="cart-table-cell product-name" data-label="Name">
+          {{item.product.productName}}
+        </td>
+        <td class="cart-table-cell product-description" data-label="Description">
+          {{item.product.productDescription}}
+        </td>
+        <td class="cart-table-cell original-price" data-label="Original Price">
+          {{item.product.productActualPrice | currency:'INR':true}}
+        </td>
+        <td class="cart-table-cell discounted-price" data-label="Discounted Price">
+          {{item.product.productDiscountedPrice | currency:'INR':true}}
+        </td>
+        <td class="cart-table-cell" data-label="Action">
+          <div class="actions-container">
+            <button class="action-button warn-button" (click)="delete(item.cartId)">
+              Remove
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #emptyCart>
+    <div class="empty-cart-message">
+      <div class="empty-cart-icon">🛒</div>
+      <h3>Your cart is empty</h3>
+      <p>Start shopping to add items to your cart</p>
+    </div>
+  </ng-template>
+</div>

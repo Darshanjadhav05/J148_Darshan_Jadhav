@@ -1,0 +1,201 @@
+table {
+    width : 100%;
+}/* Admin Orders Container */
+.admin-orders-container {
+    padding: 24px;
+    background: #fafafa;
+  }
+  
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .admin-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: #3f51b5;
+    margin: 0;
+  }
+  
+  .admin-controls {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  
+  .status-filter {
+    min-width: 200px;
+  }
+  
+  .export-btn {
+    border-radius: 4px;
+  }
+  
+  /* Table Styles */
+  .table-responsive {
+    overflow-x: auto;
+  }
+  
+  .admin-orders-table {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .admin-orders-table th.mat-header-cell {
+    background-color: #3f51b5;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  .admin-orders-table td.mat-cell, 
+  .admin-orders-table th.mat-header-cell {
+    padding: 12px 16px;
+  }
+  
+  /* Column Specific Styles */
+  .order-id {
+    font-weight: 500;
+    color: #3f51b5;
+  }
+  
+  .product-cell {
+    min-width: 250px;
+  }
+  
+  .product-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .product-thumbnail {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+  }
+  
+  .product-name {
+    font-weight: 500;
+  }
+  
+  .customer-cell {
+    min-width: 200px;
+  }
+  
+  .customer-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .customer-name {
+    font-weight: 500;
+  }
+  
+  .customer-email {
+    font-size: 12px;
+    color: #757575;
+  }
+  
+  .address-cell {
+    max-width: 200px;
+  }
+  
+  .address-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .contact-cell {
+    min-width: 150px;
+  }
+  
+  .contact-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .contact-icon {
+    font-size: 18px;
+    color: #757575;
+  }
+  
+  /* Status Badges */
+  .status-badge {
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    display: inline-block;
+  }
+  
+  .status-processing {
+    background-color: #fff3e0;
+    color: #e65100;
+  }
+  
+  .status-shipped {
+    background-color: #e3f2fd;
+    color: #1565c0;
+  }
+  
+  .status-delivered {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+  
+  .status-cancelled {
+    background-color: #ffebee;
+    color: #c62828;
+  }
+  
+  /* Actions Column */
+  .actions-cell {
+    text-align: right;
+  }
+  
+  /* Paginator */
+  .admin-paginator {
+    margin-top: 16px;
+    background: transparent;
+  }
+  
+  /* Hover Effects */
+  .mat-row:hover {
+    background-color: #f5f5f5;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 960px) {
+    .admin-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .admin-controls {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .admin-orders-container {
+      padding: 16px;
+    }
+    
+    .admin-orders-table td.mat-cell, 
+    .admin-orders-table th.mat-header-cell {
+      padding: 8px 12px;
+    }
+  }

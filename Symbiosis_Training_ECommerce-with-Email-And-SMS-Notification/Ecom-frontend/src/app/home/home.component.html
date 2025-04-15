@@ -1,0 +1,269 @@
+<div class="ecommerce-home">
+  <!-- 🎠 Hero Carousel -->
+  <div class="hero-carousel">
+    <ngb-carousel *ngIf="heroImages.length > 0">
+      <ng-template ngbSlide *ngFor="let image of heroImages">
+        <div class="carousel-image-container">
+          <img [src]="image.url" [alt]="image.alt" class="carousel-image" />
+        </div>
+        <div class="carousel-caption">
+          <h3>{{ image.title }}</h3>
+          <p>{{ image.description }}</p>
+          <button mat-raised-button color="accent" class="shop-now-btn">
+            SHOP NOW
+          </button>
+        </div>
+      </ng-template>
+    </ngb-carousel>
+  </div>
+
+  <!-- 🔍 Search Bar Section -->
+  <section class="search-section">
+    <div class="container">
+      <div class="search-container">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Search for products, brands and more</mat-label>
+          <mat-icon matPrefix class="search-icon">search</mat-icon>
+          <input
+            #searchkeyword
+            (keyup)="searchByKeyword(searchkeyword.value)"
+            matInput
+            placeholder="Search for products..."
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            *ngIf="searchkeyword.value"
+            (click)="searchkeyword.value = ''; searchByKeyword('')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🏷️ Category Tabs -->
+  <section class="category-section" *ngIf="categories.length > 0">
+    <div class="container">
+      <h2 class="section-title">Shop by Category</h2>
+      <div class="category-grid">
+        <div
+          class="category-card"
+          *ngFor="let category of categories"
+          (click)="navigateToCategory(category.id)"
+        >
+          <div class="category-icon">
+            <mat-icon>{{ category.icon }}</mat-icon>
+          </div>
+          <h3>{{ category.name }}</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🛒 Product Grid Section -->
+  <section class="product-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Featured Products</h2>
+        <div class="sort-options">
+          <mat-form-field appearance="fill">
+            <mat-label>Sort By</mat-label>
+            <mat-select
+              [(value)]="selectedSort"
+              (selectionChange)="sortProducts()"
+            >
+              <mat-option value="popularity">Popularity</mat-option>
+              <mat-option value="price-low">Price: Low to High</mat-option>
+              <mat-option value="price-high">Price: High to Low</mat-option>
+              <mat-option value="newest">Newest First</mat-option>
+              <mat-option value="discount">Best Discount</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div class="loading-spinner" *ngIf="isLoading">
+        <mat-spinner diameter="50"></mat-spinner>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="product-grid">
+        <mat-card *ngFor="let p of productDetails" class="product-card">
+          <!-- Product Badges -->
+          <div class="product-badges">
+            <!-- <span class="badge new" *ngIf="isNewProduct(p.addedDate)">NEW</span> -->
+            <span
+              class="badge discount"
+              *ngIf="p.productDiscountedPrice !== p.productActualPrice"
+            >
+              {{
+                calculateDiscount(
+                  p.productActualPrice,
+                  p.productDiscountedPrice
+                )
+              }}% OFF
+            </span>
+            <!-- <span class="badge out-of-stock" *ngIf="p.stock === 0">OUT OF STOCK</span> -->
+          </div>
+
+          <!-- Product Image with hover effect -->
+          <div class="image-container">
+            <img
+              mat-card-image
+              [src]="p.productImages[0]?.url || 'assets/default-product.png'"
+              alt="{{ p.productName }}"
+              class="product-image"
+              (click)="showProductDetails(p.productId ?? 0)"
+            />
+            <div
+              class="quick-view"
+              (click)="showProductDetails(p.productId ?? 0)"
+            >
+              <mat-icon>visibility</mat-icon> Quick View
+            </div>
+            <mat-icon
+              (click)="toggleWishlist(p.productId ?? 0)"
+              [class.wishlist-active]="
+                wishlistService.isInWishlist(p.productId ?? 0)
+              "
+              class="wishlist-icon"
+            >
+              {{
+                wishlistService.isInWishlist(p.productId?? 0)
+                  ? "favorite"
+                  : "favorite_border"
+              }}
+            </mat-icon>
+          </div>
+
+          <mat-card-content>
+            <!-- Product Name -->
+            <h3
+              class="product-name"
+              (click)="showProductDetails(p.productId ?? 0)"
+            >
+              {{ p.productName }}
+            </h3>
+
+            <!-- Product Rating -->
+            <div class="product-rating" *ngIf="(p?.rating ?? 0) > 0">
+              <div class="stars">
+                <mat-icon *ngFor="let star of [1, 2, 3, 4, 5]">
+                  {{
+                    star <= (p?.rating || 0)
+                      ? "star"
+                      : star - 0.5 <= (p?.rating || 0)
+                      ? "star_half"
+                      : "star_border"
+                  }}
+                </mat-icon>
+              </div>
+              <span class="rating-count">({{ p.reviewCount }})</span>
+            </div>
+
+            <!-- Price Details -->
+            <div class="price-container">
+              <span class="current-price"
+                >₹{{ p.productDiscountedPrice | number }}</span
+              >
+              <span
+                *ngIf="p.productDiscountedPrice !== p.productActualPrice"
+                class="original-price"
+              >
+                <del>₹{{ p.productActualPrice | number }}</del>
+              </span>
+            </div>
+
+            <!-- Delivery Info -->
+            <div class="delivery-info">
+              <mat-icon>local_shipping</mat-icon>
+              <span>Free Delivery</span>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <!-- Add to Cart Button -->
+            <button
+              mat-raised-button
+              color="primary"
+              class="add-to-cart-btn"
+              (click)="addtocart(p.productId ?? 0)"
+            >
+              <mat-icon>add_shopping_cart</mat-icon>
+              {{ "Add to Cart" }}
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+
+      <!-- Empty State -->
+      <div
+        class="empty-state"
+        *ngIf="productDetails.length === 0 && !isLoading"
+      >
+        <mat-icon class="empty-icon">search_off</mat-icon>
+        <h3>No products found</h3>
+        <p>
+          Try adjusting your search or filter to find what you're looking for.
+        </p>
+        <button mat-raised-button color="primary" (click)="resetSearch()">
+          Reset Search
+        </button>
+      </div>
+
+      <!-- Load More Button -->
+      <div class="text-center mt-5" *ngIf="showLoadButton">
+        <button
+          mat-raised-button
+          color="accent"
+          (click)="loadMoreProduct()"
+          [disabled]="isLoading"
+        >
+          <span *ngIf="!isLoading">Load More Products</span>
+          <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 📦 Special Offers Section -->
+  <section class="offers-section">
+    <div class="container">
+      <h2 class="section-title">Special Offers</h2>
+      <div class="offer-cards">
+        <div class="offer-card" *ngFor="let offer of specialOffers">
+          <div class="offer-content">
+            <h3>{{ offer.title }}</h3>
+            <p>{{ offer.description }}</p>
+            <button mat-stroked-button class="offer-btn">Shop Now</button>
+          </div>
+          <div class="offer-image">
+            <img [src]="offer.imageUrl" [alt]="offer.title" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ✉️ Newsletter Section -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="newsletter-content">
+        <h2>Subscribe to our Newsletter</h2>
+        <p>Get the latest updates on new products and upcoming sales</p>
+        <form class="newsletter-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Your Email Address</mat-label>
+            <input matInput placeholder="Enter your email" type="email" />
+          </mat-form-field>
+          <button mat-raised-button color="accent" type="submit">
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>

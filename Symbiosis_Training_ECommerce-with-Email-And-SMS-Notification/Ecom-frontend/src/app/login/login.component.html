@@ -1,0 +1,68 @@
+<div class="container mt-5">
+  <div class="card p-4 shadow-sm">
+    <form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">
+      
+      <!-- Error Message -->
+      <div *ngIf="loginError" class="alert alert-danger mt-2">
+        Invalid username or password.
+      </div>
+      <!-- Username Input -->
+      <div class="form-group">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Username</mat-label>
+          <input 
+            matInput 
+            formControlName="userName" 
+            id="userName" 
+            placeholder="Enter your username" 
+            autocomplete="off">
+          <mat-hint>Enter your username</mat-hint>
+          <mat-error *ngIf="loginForm.get('userName')?.invalid && loginForm.get('userName')?.touched">
+            Username is required.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Password Input -->
+      <div class="form-group">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Password</mat-label>
+          <input 
+            type="password" 
+            matInput 
+            formControlName="userPassword" 
+            id="userPassword" 
+            placeholder="Enter your password" 
+            autocomplete="off">
+          <mat-hint>Enter your password</mat-hint>
+          <mat-error *ngIf="loginForm.get('userPassword')?.invalid && loginForm.get('userPassword')?.touched">
+            Password is required.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+
+      <!-- Login Button -->
+      <button 
+      type="submit" 
+      mat-raised-button 
+      color="primary" 
+      class="w-100 mt-3 login-btn" 
+      [disabled]="loginForm.invalid || loading"
+      [class.login-btn-loading]="loading">
+      <span class="button-content">
+        <mat-icon *ngIf="!loading">login</mat-icon>
+        <mat-spinner *ngIf="loading" diameter="20" strokeWidth="3"></mat-spinner>
+        <span class="button-text">{{ loading ? 'Logging in...' : 'Login' }}</span>
+      </span>
+    </button>
+
+    </form>
+  </div>
+
+  <!-- Register Link (Only shown on login error) -->
+  <div *ngIf="loginError" class="text-center mt-3">
+    <span>Don't have an account? </span>
+    <a href="javascript:void(0)" class="text-primary" (click)="registerUser()">Register here</a>
+  </div>
+</div>
